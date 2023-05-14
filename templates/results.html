@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block content %}
+<body class="bg-mainColor text-white">
+  <p class="pt-6 w-2/3 mx-auto pb-8">
+    В таблице ниже приведены расчеты на основе базы данных, которую Вы выбрали. По осям X и Y расположены атрибуты. Таблица представлена в виде перечечений, где при совпадении атрибута по обеим осям выведен коэффициент для единичного атрибута, в иных случаях для их сочетаний.
+  </p>
+  <div class="container flex mx-auto">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-6 py-3">
+              <span class="sr-only">Атрибуты</span>
+          </th>
+          {% for param in params %}
+            <th scope="col" class="px-6 py-3">
+              {{param}}
+            </th>
+          {% endfor %}
+        </tr> 
+      </thead>
+      <tbody>
+        {% for param in params %}
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {{param}}
+            </td>
+            {% for param2 in params %}
+            <td>
+              {{result_dict[param][param2]}}
+            </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="pt-6 w-2/3 mx-auto pb-8">В таблице ниже предствлены значения вероятности идентификации для атрибутов и их сочетаний. Сочетания атрибутов отображаются в таблице в том случае, когда для атрибута вне сочетания вероятность иднетификации не превышает нормативное значение.</p>
+  <div class="container flex mx-auto justify-center items-center">
+    
+    <table class=" text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-6 py-3">
+              <span class="">Атрибут</span>
+          </th>
+            <th scope="col" class="px-6 py-3">
+              <span class="">Вероятность идентификации</span>
+            </th>
+        </tr> 
+      </thead>
+      <tbody>
+        {% for key,value in bot_final_sorted.items() %}
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {{key}}
+            </td>
+            <td>
+              {{value}}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="flex justify-center pt-5 pb-8">
+      <button
+        class="bg-red-500 py-2 px-4 rounded-full hover:bg-red-700 items-center" id="btn_full" onclick="window.location.href = '/full_results'"
+      >
+        Подробнее
+  </button>
+      
+    </div>
+</body>
+{% endblock %}
