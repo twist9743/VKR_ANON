@@ -8,7 +8,7 @@ from flask import (Flask, make_response, redirect, render_template, request,
                    session, url_for)
 
 from fundament import (W_NORM, auth_chance_1_param, auth_chance_2_param,
-                       read_file)
+                       read_csv, read_file)
 
 app = Flask(__name__)
 
@@ -59,7 +59,7 @@ def results():
     if os.path.isfile("user_files/" + session + ".xlsx"):
         df, params = read_file("user_files/" + session + ".xlsx", "xlsx")
     elif os.path.isfile("user_files/" + session + ".csv"):
-        df, params = read_file("user_files/" + session + ".csv", "csv")
+        df, params = read_csv("user_files/" + session + ".csv", "csv")
         
     result_1_param = {}
     result_2_param = {}
@@ -87,6 +87,8 @@ def results():
         result_dict.update({key:row})
     print(result_dict)
     
+    
+    min_params_list=any
     bot_table=dict()
     min_wj=list()
     result = list()
@@ -131,6 +133,10 @@ def results():
                 final_result[list(result_2_param.keys())[i]] = list(
                     result_2_param.values()
                 )[i]
+    for i in range(len(final_result.values())-1):
+        check_key=list(final_result.keys())[i]
+        if list(final_result.values())[i] < 0.05:
+            del final_result[check_key]
     bot_final= bot_table | final_result
     bot_final_sorted = dict(sorted(bot_final.items(), key=itemgetter(1), reverse=True))
     

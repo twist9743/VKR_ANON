@@ -12,6 +12,11 @@ def read_file(file_name, file_ext="xlsx"):
     params = df.columns
     return (df, params)
 
+def read_csv(file_name,file_ext="csv"):
+    df = pd.read_csv(file_name, header=0)
+    params=df.columns
+    return(df,params)
+
 
 def all_info(df):
     V = df.shape[0]
