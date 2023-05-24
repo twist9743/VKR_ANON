@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+<body class="bg-mainColor text-white h-full">
+<div class="flex justify-center">
+<form method="POST" class="flex items-center w-32 flex-col">
+<fieldset> 
+    <div class="flex items-center mb-4">
+        {% for param in params %}
+        <input id="{{param}}" type="checkbox" name="params" value="{{param}}" class="ml-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+        <label class="ml-2 text-sm font-medium text-white dark:text-gray-300">{{param}}</label>
+        {% endfor %}
+    </div>
+  </fieldset>
+  <button type="submit" class="items-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Запустить</button>
+</form>
+</div>
+</body>
+{% endblock %}

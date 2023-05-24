@@ -2,34 +2,35 @@
 <body class="bg-mainColor text-white">
   <!-- <h1 class="text-5xl">SNUS</h1> -->
   <div class="flex flex-col items-center mx-auto">
+    <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">
+      Количество одинаковых элементов каждого значения показателя
+    </h2>
+    <div id="plots_QJ_container" class="grid grid-cols-2 gap-4"></div>
 
-    <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">Количество одинаковых элементов каждого значения показателя</h2>
-    <div id="plots_QJ_container" class="grid grid-cols-2 gap-4">
-      
+    <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">
+      Коэффициент вероятности идентификации
+    </h2>
+    <div id="plots_param1_container"></div>
+
+    <div id="plot_xy_holder">
+        <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">
+          Распределение совокупности атрибутов
+        </h2>
+      <div id="plots_xy_container" class="grid grid-cols-2 gap-4"></div>
     </div>
-
-    <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">Коэффициент вероятности идентификации</h2>
-    <div id="plots_param1_container">
-      
-    </div>
-
-    <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">Распределение совокупности атрибутов</h2>
-    <div id="plots_xy_container" class="grid grid-cols-2 gap-4">
-      
-    </div>
-
-    <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">Коэффициент вероятности идентификации по совокупности атрибутов</h2>
-    <div id="plots_param2_container">
-      
-    </div>
-
+    
+    <div id="plot_param2_holder">
+      <h2 class="text-center text-2xl font-bold align-top mb-5 mt-10">
+        Коэффициент вероятности идентификации по совокупности атрибутов
+      </h2>
+    <div id="plots_param2_container"></div> 
   </div>
 
-
+  </div>
 </body>
 
 <script id="data_from_analys">
-  {{data|tojson}}
+  {{data | tojson}}
 </script>
 
 <script src="{{url_for('static',filename='js/results.js')}}"></script>

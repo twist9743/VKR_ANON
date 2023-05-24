@@ -11,7 +11,7 @@ from fundament import (W_NORM, auth_chance_1_param, auth_chance_2_param,
                        read_csv, read_file)
 
 app = Flask(__name__)
-
+data=dict(df=None,exclude_params=None)
 app.config.update(SECRET_KEY="osd(99092=36&462134kjKDhuIS_d23")
 
 
@@ -30,7 +30,11 @@ def home():
             "session",
             hashlib.sha256(str(int(random.random() * 10)).encode()).hexdigest(),
         )
+        
+    
     return res
+
+
 
 
 @app.route("/api/upload_file", methods=["POST"])
@@ -49,29 +53,51 @@ def api_upload():
         }
     return {"error": False}
 
-@app.route("/results", methods=["GET"])
-def results():
+def check_file():
     if request.cookies.get("session", None) == None:
         return redirect(url_for("home.html"))
      
     session = request.cookies.get("session")
     
     if os.path.isfile("user_files/" + session + ".xlsx"):
-        df, params = read_file("user_files/" + session + ".xlsx", "xlsx")
+        data["df"] = read_file("user_files/" + session + ".xlsx", "xlsx")
     elif os.path.isfile("user_files/" + session + ".csv"):
-        df, params = read_csv("user_files/" + session + ".csv", "csv")
+        data["df"] = read_csv("user_files/" + session + ".csv", "csv")
+    
+
+
+@app.route("/choose_params", methods=["GET","POST"]) 
+def choose_params():
+    if request.method=='GET':
+        check_file()
+        #df = df.drop(columns=['FirstName','MiddleName'])
+        params=set(data["df"].columns) 
+    if request.method=="POST":
+        params_to_exclude =set(request.form.getlist("params"))
         
+
+        data["exclude_params"]=params_to_exclude
+        return redirect(url_for("results"))
+    
+    return render_template("choose_params.html", params=params)    
+    
+
+@app.route("/results", methods=["GET"])
+def results():
+    
+    params = list(data["exclude_params"])   
     result_1_param = {}
     result_2_param = {}
-
+    
+    
     Q_j_list = []
     for i in params:
-        Q_j_list.append(auth_chance_1_param(df, i, result_1_param))
+        Q_j_list.append(auth_chance_1_param(data["df"], i, result_1_param))
    
     xy_list = []
-    for i in combinations(params.to_list(), 2):
+    for i in combinations(params, 2):
         xy_list.append(
-            auth_chance_2_param(df, i[0], i[1], result_2_param)
+            auth_chance_2_param(data["df"], i[0], i[1], result_2_param)
         )
 
     
@@ -149,29 +175,23 @@ def results():
 
 @app.route("/full_results", methods=["GET"])
 def full_results():
-    if request.cookies.get("session", None) == None:
-        return redirect(url_for("home.html"))
-
-    session = request.cookies.get("session")
-
-    if os.path.isfile("user_files/" + session + ".xlsx"):
-        df, params = read_file("user_files/" + session + ".xlsx", "xlsx")
-    elif os.path.isfile("user_files/" + session + ".csv"):
-        df, params = read_file("user_files/" + session + ".csv", "csv")
-
+    
+    params = list(data["exclude_params"])
     result_1_param = {}
     result_2_param = {}
 
+
+
     Q_j_list = []
     for i in params:
-        Q_j_list.append(auth_chance_1_param(df, i, result_1_param))
-   
+        Q_j_list.append(auth_chance_1_param(data["df"], i, result_1_param))
+    
     xy_list = []
-    for i in combinations(params.to_list(), 2):
+    for i in combinations(params, 2):
         xy_list.append(
-            auth_chance_2_param(df, i[0], i[1], result_2_param)
+            auth_chance_2_param(data["df"], i[0], i[1], result_2_param)
         )
-
+    print(xy_list)
     return render_template(
         "full_results.html",
         data={
@@ -185,3 +205,12 @@ def full_results():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# Выбор атрибутов пользователем
+''' new_params = list()
+    user_params = input().split()
+    for i in user_params:
+        for j in range(len(params)):
+            if i == list(params)[j]:
+                new_params.append(list(params)[j])
+    print("ПОЛЬЗОВАТЕЛЬСКИЕ ПАРАМЕТРЫ", new_params) '''

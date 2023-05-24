@@ -9,13 +9,13 @@ W_NORM = 0.05
 
 def read_file(file_name, file_ext="xlsx"):
     df = pd.read_excel(file_name, header=0)
-    params = df.columns
-    return (df, params)
+    
+    return df
 
 def read_csv(file_name,file_ext="csv"):
     df = pd.read_csv(file_name, header=0)
-    params=df.columns
-    return(df,params)
+    
+    return df
 
 
 def all_info(df):

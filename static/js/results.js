@@ -6,6 +6,9 @@ let plotsParam1Container = document.getElementById('plots_param1_container')
 let plotsParam2Container = document.getElementById('plots_param2_container')
 let plotsQJcontainer = document.getElementById('plots_QJ_container')
 
+let plotXYholder = document.getElementById('plot_xy_holder')
+let plotParam2Holder = document.getElementById('plot_param2_holder')
+
 for (let i = 0; i < data.Q_j_list.length; i++) {
     plot = document.createElement('div');
 
@@ -28,18 +31,25 @@ for (let i = 0; i < data.Q_j_list.length; i++) {
 }
 
 {
-    plot = document.createElement('div');
+    if (Object.keys(data.result_2_param).length == 0) {
+        plotParam2Holder.remove()
+    }
+    else {
+        plot = document.createElement('div');
 
-    Plotly.newPlot(plot, [{
-        x: Object.keys(data.result_2_param),
-        y: Object.values(data.result_2_param),
-        type: "bar",
-    }], {
-        margin: { t: 0 }
-    }, { responsive: true });
+        Plotly.newPlot(plot, [{
+            x: Object.keys(data.result_2_param),
+            y: Object.values(data.result_2_param),
+            type: "bar",
+        }], {
+            margin: { t: 0 }
+        }, { responsive: true });
 
-    plotsParam2Container.appendChild(plot)
+        plotsParam2Container.appendChild(plot)
+    }
 }
+
+
 
 {
     plot = document.createElement('div');
@@ -54,25 +64,29 @@ for (let i = 0; i < data.Q_j_list.length; i++) {
 
     plotsParam1Container.appendChild(plot)
 }
-
-for (let i = 0; i < data.xy_list.length; i++) {
-    plot = document.createElement('div');
-
-    Plotly.newPlot(plot, [{
-        x: data.xy_list[i][0],
-        y: data.xy_list[i][1],
-        mode: 'lines+markers',
-        marker: {
-            color: 'rgb(255, 0, 0)',
-        },
-        line: {
-            color: 'rgb(55, 128, 191)',
-        }
-    }], {
-        margin: { t: 0 }
-    }, { responsive: true });
-
-
-    plotsContainer.appendChild(plot)
+if (data.xy_list.length == 0) {
+    plotXYholder.remove()
 }
+else {
+    for (let i = 0; i < data.xy_list.length; i++) {
+        plot = document.createElement('div');
+        Plotly.newPlot(plot, [{
+            x: data.xy_list[i][0],
+            y: data.xy_list[i][1],
+            mode: 'lines+markers',
+            marker: {
+                color: 'rgb(255, 0, 0)',
+            },
+            line: {
+                color: 'rgb(55, 128, 191)',
+            }
+        }], {
+            margin: { t: 0 }
+        }, { responsive: true });
+
+
+        plotsContainer.appendChild(plot)
+    }
+}
+
 

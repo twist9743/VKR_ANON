@@ -23,7 +23,7 @@ file.addEventListener("change", async function (event) {
         return
     }
 
-    window.location.href = "/results"
+    window.location.href = "/choose_params"
 })
 
 
